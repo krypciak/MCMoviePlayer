@@ -49,7 +49,10 @@ public class IntoMc {
 		for (int i = 1; i < len; i++) {
 			StringBuilder b = new StringBuilder();
 			names[i] = String.valueOf(i);
-			b.append(compressedImage(frames[i - 1], frames[i], compression));
+			BufferedImage old = frames[i - 1];
+			BufferedImage new1 = frames[i];
+
+			b.append(compressedImage(old, new1, compression));
 
 			b.append("execute if score mmpstop mcm matches 0 run schedule function mmp:" + (i + 1) + " " + tickDelay
 					+ "t");
@@ -100,8 +103,12 @@ public class IntoMc {
 							type += "1";
 
 					}
+
+
 					if (type.charAt(1) == '1' || type.charAt(2) == '1') {
 						type = type.charAt(0) + "1";
+					} else {
+						type = type.charAt(0) + "0";
 					}
 
 					b.append(cmd(type, mx, my, mz, calcRGB(c[0]), calcRGB(c[1]), calcRGB(c[2]), h));
@@ -151,11 +158,10 @@ public class IntoMc {
 				+ " spawner{MaxNearbyEntities:0,SpawnData:{id:\"minecraft:armor_stand\",Marker:1b,Invisible:1b,Pose:{LeftArm:[0f,0f,0f],RightArm:[0f,0f,0f]},HandItems:[{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:"
 				+ c2 + "},CustomModelData:" + (h * 3 + 2)
 				+ "}},{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:" + c3 + "},CustomModelData:"
-				+ (h * 3 + 3)
-				+ "}}],ArmorItems:[{},{},{},{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:" + c1
-				+ "},CustomModelData:" + (h * 3 + 1) + "}}]}} destroy\n";
+				+ (h * 3 + 3) + "}}],ArmorItems:[{},{},{},{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:"
+				+ c1 + "},CustomModelData:" + (h * 3 + 1) + "}}]}} destroy\n";
 	}
-	
+
 	private static String cmd(String type, int mx, int my, int mz, int c1, int c2, int c3, int h) {
 
 		switch (type) {
@@ -173,14 +179,13 @@ public class IntoMc {
 		case "10":
 			return "data merge block " + mx + " " + my + " " + mz
 					+ " {SpawnData:{id:\"minecraft:armor_stand\",ArmorItems:[{},{},{},{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:"
-					+ c1 + "},CustomModelData:" + (h * 3 + 1) + "}}]}} destroy\n";
+					+ c1 + "},CustomModelData:" + (h * 3 + 1) + "}}]}}\n";
 		case "01":
 			return "data merge block " + mx + " " + my + " " + mz
 					+ " {SpawnData:{id:\"minecraft:armor_stand\",HandItems:[{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:"
 					+ c2 + "},CustomModelData:" + (h * 3 + 2)
 					+ "}},{id:\"minecraft:leather_boots\",Count:1b,tag:{display:{color:" + c3 + "},CustomModelData:"
-					+ (h * 3 + 3)
-					+ "}}]}}\n";
+					+ (h * 3 + 3) + "}}]}}\n";
 
 		default:
 			return "";

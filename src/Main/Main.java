@@ -46,7 +46,7 @@ public class Main {
 			System.err.println("Framerate must be betwenn numbers 1 and 20");
 			return;
 		}
-
+		
 		int compr;
 		try {
 			compr = Integer.parseInt(args[5]);
